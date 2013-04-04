@@ -13,6 +13,12 @@ class Parser:
 							(?P<content>\".*?\")*(?P=s)*
 							(?:\*(?P=s)*(?P<multiples>\d))$"""
 
+	def lastElement(self):
+		return self.stack[-1]
+
+	def addElement(self,element):
+		self.stack += [element]
+
 	def parseLine(self,line):
 		parsed = re.match(self.template,line,re.X)
 		if parsed is None:
@@ -28,14 +34,18 @@ class Parser:
 	def parse(self, block=None):
 		lines = open(self.filepath,'r').readlines()
 		for line in lines:
-			line += 1
+			self.line += 1
 			parsed = parseLine(line)
 			if parsed is not None:
 				self.depth = parsed['depth']
 				element = Element(**parsed)
-				if self.stack = []:
-					self.stack += element
-				elif self.stack[-1].depth <= self.depth:
-					while self.stack[-1].depth <= self.depth:
+				if self.stack == []:
+					self.addElement(element)
+				elif self.lastElement().depth < self.depth:
+					self.lastElement().addChild(element)
+					self.addElement(element)
+				elif self.lastElement().depth >= self.depth:
+					while self.lastElement().depth >= self.depth:
 						self.stack.pop
+
 				# aaaaaaaah

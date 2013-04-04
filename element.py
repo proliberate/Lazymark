@@ -1,28 +1,14 @@
 class Element:
 
-	def __init__(self,name="",cat=[],iden=[],attr=[],depth=0,content="",closed=True):
+	def __init__(self,name="",cat=[],iden=[],attr=[],children=[],depth=0,content="",closed=True):
 		self.name = ""
 		self.cat = cat
 		self.iden = iden
 		self.attr = attr
+		self.children = children
 		self.depth = depth
 		self.content = content
 		self.closed = closed
-
-	def setName(self,name):
-		self.name = name
-
-	def setClass(self,*cat):
-		self.cat += list(cat)
-
-	def setID(self,*iden):
-		self.iden += list(iden)
-
-	def setAttribute(self,*attr):
-		self.attr += list(attr)
-
-	def setContent(self,content):
-		self.contents = contents
 
 	def write(self):
 		name = self.name
