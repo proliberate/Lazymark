@@ -9,12 +9,6 @@ class Element:
 		self.content = content
 		self.closed = closed
 
-	def __enter__(self):
-		return self
-
-	def __exit__(self):
-		self.write()
-
 	def setName(self,name):
 		self.name = name
 
