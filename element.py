@@ -18,5 +18,18 @@ class Element:
 		depth = "\t" * self.depth
 		content = self.content
 		closetag = "" if not self.closed else "</{}>".format(name)
-		tag = "{}<{}>{}{}".format(depth," ".join(x for x in [name,cat,iden,attr]),content,closetag)
-		print tag
+		if not self.children:
+			print "{}<{}>{}{}".format(depth," ".join(x for x in [name,cat,iden,attr]),content,closetag)
+		else:
+			print "{}<{}>{}".format(depth," ".join(x for x in [name,cat,iden,attr]),content)
+			for child in self.children:
+				child.write()
+			print "{}{}".format(depth,closetag)
+
+		#tag = "{}<{}>{}{}".format(depth," ".join(x for x in [name,cat,iden,attr]),content,closetag)
+
+	def addChild(self,child):
+		self.children += [child]
+
+	def expandAll(self):
+		self.expandTag

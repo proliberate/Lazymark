@@ -1,0 +1,7 @@
+html
+	head
+		title "The test of ages"
+	body
+	div .blue #red
+		div
+		ul
