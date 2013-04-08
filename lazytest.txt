@@ -1,6 +1,7 @@
 html
 	head
 		title "The test of ages"
+		blue
 	body
 	div .blue #red
 		div
