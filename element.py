@@ -21,18 +21,20 @@ class Element:
 		depth = "\t" * self.depth
 		content = self.content
 		closetag = "" if not self.closed else "</{}>".format(name)
+		x = [] + [x for x in [name,cat,iden,attr] if x]
 		if not self.children:
-			print "{}<{}>{}{}".format(depth," ".join(x for x in [name,cat,iden,attr]),content,closetag)
+			for i in range(self.multiples):
+				print "{}<{}>{}{}".format(depth," ".join(x),content,closetag)
 		else:
-			print "{}<{}>{}".format(depth," ".join(x for x in [name,cat,iden,attr]),content)
-			for child in self.children:
-				if child.name == "":
-					break
-				child.write()
-			print "{}{}".format(depth,closetag)
+			for i in range(self.multiples):
+				print "{}<{}>{}".format(depth," ".join(x),content)
+				for child in self.children:
+					if child.name == "":
+						break
+					child.write()
+				print "{}{}".format(depth,closetag)
 
 		#tag = "{}<{}>{}{}".format(depth," ".join(x for x in [name,cat,iden,attr]),content,closetag)
 
 	def addChild(self,child):
-		x = copy.deepcopy(child)
-		self.children += [x]
+		self.children.append(child)

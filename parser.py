@@ -1,4 +1,4 @@
-import re
+import re, copy
 from element import Element
 
 class Parser:
@@ -9,6 +9,9 @@ class Parser:
 		self.filepath = filepath
 		self.stack = []
 		self.toplevel = None
+		classid = r"(?P<classid>(?:[\.|\#][^\W\d]+[^\W]*(?P=s)*)*)(?P=s)*"
+		attr = r"(?P<attr>(?:[^\W\d]+[^\W]*=(?P<qu>[\"|'])?\w+(?P=qu)?(?P=s)*)*)(?P=s)*"
+		content = r"(?:[\"|'](?P<content>.*?)[\"|'])*(?P=s)*"
 		self.template = r"""^(?P<tabs>\t*)
 			(?:	
 				(?:
@@ -16,11 +19,12 @@ class Parser:
 				)?
 				(?:
 					(?P<name>[^\W\d_]*)(?P<s>[^\S\r\n])*
-					(?P<classid>(?:[\.|\#][^\W\d]+[^\W]*(?P=s)*)*)(?P=s)*
-					(?P<content>\".*?\")?(?P=s)*
+					{classid}
+					{attr}
+					{content}
 					(?:\*(?P=s)*(?P<multiples>\d))?
 				)	
-			)"""
+			)""".format(classid=classid,attr=attr,content=content)
 
 		self.parse()
 
@@ -36,13 +40,16 @@ class Parser:
 		parsed = re.match(self.template,line,re.X)
 		if parsed is None:
 			return parsed #if there is no match, return None
-		name = parsed.group('name') or None
-		cat = re.findall(r"([\.][^\W\d_]+[\w])",parsed.group('classid')) or None
-		iden = re.findall(r"([\#][^\W\d_]+[\w])",parsed.group('classid')) or None
-		content = parsed.group('content') or ""
-		multiples = parsed.group('multiples') or 1
-		depth = len(parsed.group('tabs')) or 0
-		return {"name":name,"cat":cat,"iden":iden,"content":content,"multiples":multiples,"depth":depth}
+		params = {}
+		params["name"] = parsed.group('name') or None
+		params["cat"] = re.findall(r"[\.]([^\W\d_]+[\w])",parsed.group('classid')) or None
+		params["iden"] = re.findall(r"[\#]([^\W\d_]+[\w])",parsed.group('classid')) or None
+		params["attr"] = re.findall(r"([^\W\d]+[^\W]*)=((?P<qu>[\"|'])?\w+(?P=qu)?)",parsed.group('attr'))
+		params["content"] = parsed.group('content') or ""
+		params["multiples"] = int(parsed.group('multiples') or 1)
+		params["depth"] = len(parsed.group('tabs')) or 0
+		params["children"] = []
+		return params
 
 	def parse(self, block=None):
 		lines = open(self.filepath,'r').readlines()
@@ -56,11 +63,16 @@ class Parser:
 				if self.stack == []:
 					self.addElement(element,True)
 				elif self.lastElement().depth < self.depth:
+					assert(self.lastElement().children is not element.children)
 					self.lastElement().addChild(element)
 					self.addElement(element)
-				elif self.lastElement().depth >= self.depth:
-					while self.lastElement().depth >= self.depth:
+				elif self.lastElement().depth > self.depth:
+					while self.lastElement().depth > self.depth:
 						self.stack.pop()
+				elif self.lastElement().depth == self.depth:
+					self.stack.pop()
+					self.lastElement().addChild(element)
+					self.addElement(element)
 		
 		self.toplevel.write()
 

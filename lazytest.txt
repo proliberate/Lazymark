@@ -4,5 +4,6 @@ html
 		blue
 	body
 	div .blue #red
-		div
+		div blue="Hey"lie=2 .key
 		ul
+			li 'Hello!' * 6
