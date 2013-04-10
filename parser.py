@@ -19,9 +19,7 @@ class Parser:
 				)?
 				(?:
 					(?P<name>[^\W\d_]*)(?P<s>[^\S\r\n])*
-					{classid}
-					{attr}
-					{content}
+					(?P<stuff>[^\*]*)
 					(?:\*(?P=s)*(?P<multiples>\d))?
 				)	
 			)""".format(classid=classid,attr=attr,content=content)
@@ -41,15 +39,23 @@ class Parser:
 		if parsed is None:
 			return parsed #if there is no match, return None
 		params = {}
+		stuff = self.parseContent(parsed.group('stuff'))
 		params["name"] = parsed.group('name') or None
-		params["cat"] = re.findall(r"[\.]([^\W\d_]+[\w])",parsed.group('classid')) or None
-		params["iden"] = re.findall(r"[\#]([^\W\d_]+[\w])",parsed.group('classid')) or None
-		params["attr"] = re.findall(r"([^\W\d]+[^\W]*)=((?P<qu>[\"|'])?\w+(?P=qu)?)",parsed.group('attr'))
-		params["content"] = parsed.group('content') or ""
+		params["cat"] = re.findall(r"[\.]([^\W\d_]+[\w])",stuff[0]) or None
+		params["iden"] = re.findall(r"[\#]([^\W\d_]+[\w])",stuff[0]) or None
+		params["attr"] = re.findall(r"([^\W\d]+[^\W]*)=((?P<q>[\"|'])?\w+(?P=q)?)",stuff[0])
+		params["content"] = stuff[1] or ""
 		params["multiples"] = int(parsed.group('multiples') or 1)
 		params["depth"] = len(parsed.group('tabs')) or 0
 		params["children"] = []
 		return params
+
+	def parseContent(self,content):
+		splitbyquotes = re.split(r"(?<=[^=])([\"|'].*?[\"|'])",content)
+		stuff = ["",""]
+		for x,i in zip(splitbyquotes,range(len(splitbyquotes))):
+			stuff[i%2] += x
+		return stuff
 
 	def parse(self, block=None):
 		lines = open(self.filepath,'r').readlines()

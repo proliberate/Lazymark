@@ -3,7 +3,7 @@ html
 		title "The test of ages"
 		blue
 	body
-	div .blue #red
+	div .blue #red "Hi" .roar
 		div blue="Hey"lie=2 .key
 		ul
 			li 'Hello!' * 6
