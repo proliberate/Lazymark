@@ -3,7 +3,7 @@ import copy
 class Element:
 
 	def __init__(self,name="",cat=[],iden=[],attr=[],children=[],depth=0,content="",closed=True,multiples=0):
-		self.name = name
+		self.name = name or "div"
 		self.cat = cat
 		self.iden = iden
 		self.attr = attr
@@ -12,6 +12,7 @@ class Element:
 		self.content = content
 		self.closed = closed
 		self.multiples = multiples
+		self.method = None
 
 	def write(self):
 		name = self.name
@@ -21,20 +22,26 @@ class Element:
 		depth = "\t" * self.depth
 		content = self.content
 		closetag = "" if not self.closed else "</{}>".format(name)
-		x = [] + [x for x in [name,cat,iden,attr] if x]
+		singleton = "" if self.closed else "/"
+		x = [x for x in [name,cat,iden,attr,singleton] if x]
 		if not self.children:
 			for i in range(self.multiples):
-				print "{}<{}>{}{}".format(depth," ".join(x),content,closetag)
+				for content in self.content:
+					print "{}<{}>{}{}".format(depth," ".join(x),content,closetag)
 		else:
 			for i in range(self.multiples):
-				print "{}<{}>{}".format(depth," ".join(x),content)
-				for child in self.children:
-					if child.name == "":
-						break
-					child.write()
-				print "{}{}".format(depth,closetag)
+				for content in self.content:
+					print "{}<{}>{}".format(depth," ".join(x),content)
+					for child in self.children:
+						if child.name == "":
+							break
+						child.write()
+					print "{}{}".format(depth,closetag)
 
 		#tag = "{}<{}>{}{}".format(depth," ".join(x for x in [name,cat,iden,attr]),content,closetag)
 
 	def addChild(self,child):
 		self.children.append(child)
+
+	def addMethod(self,method):
+		self.method.append(method)

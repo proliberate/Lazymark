@@ -1,9 +1,11 @@
 html
 	head
 		title "The test of ages"
-		blue
+		blue 'Yooo' 'Bell'
 	body
-	div .blue #red "Hi" .roar
-		div blue="Hey"lie=2 .key
-		ul
-			li 'Hello!' * 6
+		.blue #red .roar
+			blue='Hey' lie='2' .key
+			"test1".foo
+			ul
+				li 'Hello!' 'Yes' * 2
+		test h=2 h=3
