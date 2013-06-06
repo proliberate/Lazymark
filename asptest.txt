@@ -1,0 +1,48 @@
+html
+	head
+		title "Alarm Services Plus"
+		css 'style/reset.css'
+		css 'style/demogiz.css'
+	body
+		js 'html5shiv.js'
+		js 'jquery-1.8.1.min.js'
+		js 'infobox.js'
+		header
+			div
+				img src='logo.png' #logo
+				span #phone
+					img src='smartphone-abstract-small.png'
+					span '860-793-9969'
+			nav
+				ul
+					a href='#' #home
+						li.active "Home"
+					a href='about.php'
+						li "About Us"
+					a href='commercial.php'
+						li "Commercial"
+					a href='residential.php'
+						li "Residential"
+					a href='contact.php'
+						li "Contact"
+		div #main
+			div #mast.home
+				div #content
+					h1 "Keeping Your Business and Home <span>Safe</span>."
+					p "Since 1994, Allstate Alarm Services Plus has been a licensed provider of security and life safety systems." "We take great pride in providing our customers with the most reliable, sophisticated products and equipment the Fire and Security industry has to offer."
+					p .consultation "Join our thousands of satisfied customers by allowing us to provide you with a FREE consultation and written estimate."
+			div #specializing
+				span .firstchild "Specializing in:"
+				ul
+					li "Commercial" "Residential" "Fire Alarms" "Burglar Alarms" "Installation" "Service" "Monitoring"
+			div #partners
+				span "Our Partners"
+				img src='partners/partners2.jpg' alt='partners'
+		footer
+			div #fcontainer
+				ul
+					li "&copy;2012 Allstate Alarm Services Plus, LLC" "Website design by Andrew Carroll"
+				ul
+					li "We Offer 24/7 Monitoring Service."
+				ul .fcontact
+					li "Contact us" "Allstate Alarm Services Plus, LLC" "P.O. Box 7023" "Plainville, CT 06062" "860-793-9969" "info@alarmservicesplus.com"

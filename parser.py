@@ -102,5 +102,4 @@ class Parser:
 		
 		self.toplevel.write()
 
-import sys
-blue = Parser("lazytest.txt")
+Parser("lazytest.txt")

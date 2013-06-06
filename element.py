@@ -16,9 +16,9 @@ class Element:
 
 	def write(self):
 		name = self.name
-		cat = "class='{}'".format(" ".join([str(x) for x in self.cat])) if self.cat else ""
-		iden = "id='{}'".format(" ".join([str(x) for x in self.iden])) if self.iden else ""
-		attr = " ".join("{}={}".format(attr[0],attr[1]) for attr in self.attr) if self.attr else ""
+		cat = "class='{}'".format(" ".join(self.cat.split(".")[1:])) if self.cat else ""
+		iden = "id='{}'".format(" ".join(self.iden.split("#")[1:])) if self.iden else ""
+		attr = " ".join("{}={}".format(attr[0],attr[1]) for attr in self.attr.iteritems()) if self.attr else ""
 		depth = "\t" * self.depth
 		content = self.content
 		closetag = "" if not self.closed else "</{}>".format(name)
@@ -29,6 +29,7 @@ class Element:
 				for content in self.content:
 					print "{}<{}>{}{}".format(depth," ".join(x),content,closetag)
 		else:
+			if self.name == "title": print self.children
 			for i in range(self.multiples):
 				for content in self.content:
 					print "{}<{}>{}".format(depth," ".join(x),content)

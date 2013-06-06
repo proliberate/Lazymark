@@ -1,11 +1,11 @@
 html
-	head
+	head .dood
 		title "The test of ages"
 		blue 'Yooo' 'Bell'
 	body
 		.blue #red .roar
-			blue='Hey' lie='2' .key
+			#hi blue='Hey' lie='2' .key
 			"test1".foo
 			ul
 				li 'Hello!' 'Yes' * 2
-		test h=2 h=3
+				man "Yellow 'blue'" 'Yellow "blue"'
